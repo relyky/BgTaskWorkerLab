@@ -30,7 +30,7 @@ public class MyTickWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Ticker running at: {time:HH:mm:ss}", DateTime.Now);
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(3000, stoppingToken);
         }
     }
 }
