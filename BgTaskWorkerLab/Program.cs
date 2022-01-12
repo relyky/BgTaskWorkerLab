@@ -6,6 +6,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<MyTickWorker>();
+        services.AddHostedService<MyTimerHostedWorker>();
     })
     .Build();
 
