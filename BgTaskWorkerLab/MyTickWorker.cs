@@ -1,5 +1,8 @@
 namespace BgTaskWorkerLab;
 
+/// <summary>
+/// Hello World : Worker Service
+/// </summary>
 public class MyTickWorker : BackgroundService
 {
     //## Injection Member

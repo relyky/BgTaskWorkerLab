@@ -1,5 +1,8 @@
 ﻿namespace BgTaskWorkerLab;
 
+/// <summary>
+/// 最基礎的 Backgournd Worker Service 用法。
+/// </summary>
 public class MyTimerHostedWorker : IHostedService, IDisposable
 {
     //## Injection Member
