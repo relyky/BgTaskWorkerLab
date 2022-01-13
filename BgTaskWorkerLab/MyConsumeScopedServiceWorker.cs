@@ -7,14 +7,14 @@ using BgTaskWorkerLab.Services;
 
 namespace BgTaskWorkerLab;
 
-internal class MyConsumeScopedServiceHostedService : BackgroundService
+internal class MyConsumeScopedServiceWorker : BackgroundService
 {
-    readonly ILogger<MyConsumeScopedServiceHostedService> _logger;
+    readonly ILogger<MyConsumeScopedServiceWorker> _logger;
     readonly IServiceProvider _provider;
 
-    public MyConsumeScopedServiceHostedService(
+    public MyConsumeScopedServiceWorker(
         IServiceProvider provider,
-        ILogger<MyConsumeScopedServiceHostedService> logger)
+        ILogger<MyConsumeScopedServiceWorker> logger)
     {
         _provider = provider;
         _logger = logger;
