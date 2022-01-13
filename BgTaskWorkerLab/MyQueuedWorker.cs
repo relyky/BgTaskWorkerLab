@@ -25,11 +25,7 @@ internal class MyQueuedWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation(
-            $"Queued Hosted Service is running.{Environment.NewLine}" +
-            $"{Environment.NewLine}Tap W to add a work item to the " +
-            $"background queue.{Environment.NewLine}");
-
+        _logger.LogInformation("Queued Hosted Service is running.");
         await BackgroundProcessing(stoppingToken);
     }
 
@@ -37,8 +33,7 @@ internal class MyQueuedWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var workItem =
-                await TaskQueue.DequeueAsync(stoppingToken);
+            var workItem = await TaskQueue.DequeueAsync(stoppingToken);
 
             try
             {

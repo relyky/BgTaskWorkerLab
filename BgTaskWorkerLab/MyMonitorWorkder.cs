@@ -7,41 +7,53 @@ using System.Threading.Tasks;
 
 namespace BgTaskWorkerLab;
 
-internal class MonitorLoop
+/// <summary>
+/// 為 TaskQueue 之生產者
+/// </summary>
+internal class MyMonitorWorkder : BackgroundService
 {
-    private readonly IBackgroundTaskQueue _taskQueue;
     private readonly ILogger _logger;
+    private readonly IBackgroundTaskQueue _taskQueue;
     private readonly CancellationToken _cancellationToken;
 
-    public MonitorLoop(IBackgroundTaskQueue taskQueue,
-        ILogger<MonitorLoop> logger,
+    public MyMonitorWorkder(
+        ILogger<MyMonitorWorkder> logger,
+        IBackgroundTaskQueue taskQueue,
         IHostApplicationLifetime applicationLifetime)
     {
-        _taskQueue = taskQueue;
         _logger = logger;
+        _taskQueue = taskQueue;
         _cancellationToken = applicationLifetime.ApplicationStopping;
     }
 
-    public void StartMonitorLoop()
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("MonitorAsync Loop is starting.");
 
-        // Run a console user input loop in a background thread
-        Task.Run(async () => await MonitorAsync());
+        /// 正式應用：監看排程中的 Job 若安排的時間已到則放入 taskQueue 後續再依次消化。
+        await Task.Run(async () => await MonitorAsync());
     }
 
     private async ValueTask MonitorAsync()
     {
+        int launchCount = 0;
+
         while (!_cancellationToken.IsCancellationRequested)
         {
-            /// 模擬應用：用鍵盤輸入[w]產生一個新的 task 並放入 taskQueue 後續再依次消化。
+            _logger.LogInformation("監看排程中有否工作要執行...");
+
             /// 正式應用：監看排程中的 Job 若安排的時間已到則放入 taskQueue 後續再依次消化。
-            var keyStroke = Console.ReadKey();
-            if (keyStroke.Key == ConsoleKey.W) 
+
+            /// 模擬應用：每7秒發出一個 task 發出3次就結束。
+            if (launchCount < 3)
             {
                 // Enqueue a background work item
                 await _taskQueue.QueueBackgroundWorkItemAsync(BuildWorkItem);
+                launchCount++;
             }
+
+            // wait a moment
+            await Task.Delay(7000);
         }
     }
 

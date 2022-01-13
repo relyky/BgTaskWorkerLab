@@ -1,6 +1,3 @@
-//#define DEMO_123
-#define DEMO_4
-
 using BgTaskWorkerLab;
 using BgTaskWorkerLab.Model;
 using BgTaskWorkerLab.Services;
@@ -19,41 +16,32 @@ IHost host = Host.CreateDefaultBuilder(args)
             return new BackgroundTaskQueue(queueCapacity);
         });
 
-        // 用來生產 taskQueue
-        services.AddSingleton<MonitorLoop>();
-
         //## 註冊 Worker Service 
-#if DEMO_123
+        //# DEMO 1 2 3 --- 可關閉這些展示以簡化輸出
         services.AddHostedService<MyTickWorker>();
         services.AddHostedService<MyTimerHostedWorker>();
         services.AddHostedService<MyConsumeScopedServiceWorker>();
-#endif
-#if DEMO_4
-        //// 更接進真實的應用：用來生產 taskQueue
-        //services.AddHostedService<JobScheduleMonitorLoop>();
 
+        //# DEMO 4
+        // 更接進真實的應用：用來生產 taskQueue
+        services.AddHostedService<MyMonitorWorkder>();
         // 更接進真實的應用：用來消費 taskQueue
         services.AddHostedService<MyQueuedWorker>();
-#endif
+
     })
     .Build();
 
-#if DEMO_123
-//## 一般啟動只需執行 RunAsync() 即可。
+// 一般啟動
 await host.RunAsync();
-#endif
 
-#if DEMO_4
-//## 進階的啟動分二段指令。
-
-// 進階的啟動指令段一。
-await host.StartAsync();
-
-// 經由注入建構 MonitorLoop
-var monitorLoop = host.Services.GetRequiredService<MonitorLoop>();
-monitorLoop.StartMonitorLoop();
-
-// 進階的啟動指令段二。
-await host.WaitForShutdownAsync();
-
-#endif 
+////## 進階啟動分二段指令
+//
+//// 進階的啟動指令段一。
+//await host.StartAsync();
+//
+//// 經由注入建構 MonitorLoop
+//var monitorLoop = host.Services.GetRequiredService<MonitorLoop>();
+//monitorLoop.StartMonitorLoop();
+//
+//// 進階的啟動指令段二。
+//await host.WaitForShutdownAsync();
