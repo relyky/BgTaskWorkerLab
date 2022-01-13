@@ -1,5 +1,6 @@
 # BgTaskWorkerLab
- .NET6 Worker Service Lab
+ .NET6 Worker Service Lab   
+ 可應用於背景工作，如：排程。
 
 ## 開發環境
 * Visual Studio 2022
